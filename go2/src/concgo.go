@@ -32,7 +32,7 @@ func duration_ms(initial_moment TimeMs) TimeMs {
 
 // Spending time with fun
 
-type Triplet = [3]float64
+type Triplet struct{ f0, f1, f2 float64 }
 
 func random_item() float64 {
 	return rand.Float64()
@@ -44,12 +44,12 @@ func random_triplet() Triplet {
 
 func get_next_triplet(triplet Triplet) Triplet {
 
-	applicant := triplet[0] + triplet[1] - triplet[2]
+	applicant := triplet.f0 + triplet.f1 - triplet.f2
 
 	if math.Abs(applicant) <= 1.0 {
-		return Triplet{triplet[1], triplet[2], applicant}
+		return Triplet{triplet.f1, triplet.f2, applicant}
 	} else {
-		return Triplet{triplet[1], triplet[2], 1.0 / applicant}
+		return Triplet{triplet.f1, triplet.f2, 1.0 / applicant}
 	}
 }
 
@@ -58,9 +58,9 @@ func approx_eq(f1, f2 float64) bool {
 }
 
 func is_convergent(triplet, next_triplet Triplet) bool {
-	return approx_eq(triplet[0], next_triplet[0]) &&
-		approx_eq(triplet[1], next_triplet[1]) &&
-		approx_eq(triplet[2], next_triplet[2])
+	return approx_eq(triplet.f0, next_triplet.f0) &&
+		approx_eq(triplet.f1, next_triplet.f1) &&
+		approx_eq(triplet.f2, next_triplet.f2)
 }
 
 func iterate(initial_triplet Triplet, n_cycles int) float64 {
@@ -74,14 +74,14 @@ func iterate(initial_triplet Triplet, n_cycles int) float64 {
 		next_triplet := get_next_triplet(triplet)
 
 		if is_convergent(triplet, next_triplet) && !prokukarek {
-			print_convergency(initial_triplet, step, triplet[2])
+			print_convergency(initial_triplet, step, triplet.f2)
 			prokukarek = true
 		}
 
 		triplet = next_triplet
 	}
 
-	return triplet[2]
+	return triplet.f2
 }
 
 func standard_task(task_idx, n_cycles int) Task {
@@ -403,9 +403,9 @@ func print_profit_entry(obs *Observation) {
 
 func print_convergency(initial_triplet Triplet, step int, member float64) {
 	fmt.Printf("The sequence has converged: %f, %f, and %f give %f since step %d.\n",
-		initial_triplet[0],
-		initial_triplet[1],
-		initial_triplet[2],
+		initial_triplet.f0,
+		initial_triplet.f1,
+		initial_triplet.f2,
 		member,
 		step)
 }
