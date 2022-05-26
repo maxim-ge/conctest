@@ -234,24 +234,24 @@ impl Report {
 
 // Spending time with fun
 
-type Triplet = (f64, f64, f64);
+type Triplet = [f64; 3];
 
 fn random_item() -> f64 {    
     rand::random()
 }
 
 fn random_triplet() -> Triplet {
-    (random_item(), random_item(), random_item())
+    [random_item(), random_item(), random_item()]
 }
 
 fn get_next_triplet(triplet: Triplet) -> Triplet {
 
-    let applicant = triplet.0 + triplet.1 - triplet.2;
+    let applicant = triplet[0] + triplet[1] - triplet[2];
 
     if applicant.abs() <= 1.0 {
-        return (triplet.1, triplet.2, applicant);
+        return [triplet[1], triplet[2], applicant];
     } else {
-        return (triplet.1, triplet.2, 1.0/applicant);
+        return [triplet[1], triplet[2], 1.0/applicant];
     }
 }
 
@@ -260,9 +260,9 @@ fn approx_eq(f1: f64, f2: f64) -> bool {
 }
 
 fn is_convergent(triplet: Triplet, next_triplet: Triplet) -> bool {
-    approx_eq(triplet.0, next_triplet.0) &&
-    approx_eq(triplet.1, next_triplet.1) &&
-    approx_eq(triplet.2, next_triplet.2)
+    approx_eq(triplet[0], next_triplet[0]) &&
+    approx_eq(triplet[1], next_triplet[1]) &&
+    approx_eq(triplet[2], next_triplet[2])
 }
 
 fn iterate(initial_triplet: Triplet, n_cycles: usize) -> f64 {
@@ -276,14 +276,14 @@ fn iterate(initial_triplet: Triplet, n_cycles: usize) -> f64 {
         let next_triplet = get_next_triplet(triplet);
 
         if is_convergent(triplet, next_triplet) && !prokukarek {
-            print_convergency(initial_triplet, step, triplet.2);
+            print_convergency(initial_triplet, step, triplet[2]);
             prokukarek = true;
         }
 
         triplet = next_triplet;
     }    
 
-    triplet.2
+    triplet[2]
 }
 
 fn standard_task(task_idx: usize, n_cycles: usize) -> Task {     
@@ -406,9 +406,9 @@ fn print_profit_entry(obs: &Observation) {
 
 fn print_convergency(initial_triplet: Triplet, step: usize, member: f64) {
     println!("The sequence has converged: {}, {}, and {} give {} since step {}.", 
-             initial_triplet.0, 
-             initial_triplet.1, 
-             initial_triplet.2, 
+             initial_triplet[0], 
+             initial_triplet[1], 
+             initial_triplet[2],
              member, 
              step.separate_with_commas());
 }
