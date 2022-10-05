@@ -23,7 +23,7 @@ import (
 type TimeMs = int
 
 func now_ms() TimeMs {
-	return int(time.Now().UnixNano() / 1e6)
+	return int(time.Now().UnixMilli())
 }
 
 func duration_ms(initial_moment TimeMs) TimeMs {
